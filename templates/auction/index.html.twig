@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction index{% endblock %}
+
+{% block body %}
+    <h1>Auction index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for auction in auctions %}
+            <tr>
+                <td>{{ auction.id }}</td>
+                <td>{{ auction.name }}</td>
+                <td>{{ auction.deadline ? auction.deadline|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ auction.state }}</td>
+                <td>
+                    <a href="{{ path('auction_show', {'id': auction.id}) }}">show</a>
+                    <a href="{{ path('auction_edit', {'id': auction.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('auction_new') }}">Create new</a>
+{% endblock %}

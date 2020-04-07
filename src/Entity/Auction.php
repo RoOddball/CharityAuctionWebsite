@@ -26,6 +26,16 @@ class Auction
      */
     private $deadline;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\State", inversedBy="auctions")
+     */
+    private $state;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\IsBid", inversedBy="auctions")
+     */
+    private $isBid;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +61,30 @@ class Auction
     public function setDeadline(\DateTimeInterface $deadline): self
     {
         $this->deadline = $deadline;
+
+        return $this;
+    }
+
+    public function getState(): ?State
+    {
+        return $this->state;
+    }
+
+    public function setState(?State $state): self
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function getIsBid(): ?IsBid
+    {
+        return $this->isBid;
+    }
+
+    public function setIsBid(?IsBid $isBid): self
+    {
+        $this->isBid = $isBid;
 
         return $this;
     }

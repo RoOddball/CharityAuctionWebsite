@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit IsBid{% endblock %}
+
+{% block body %}
+    <h1>Edit IsBid</h1>
+
+    {{ include('is_bid/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('is_bid_index') }}">back to list</a>
+
+    {{ include('is_bid/_delete_form.html.twig') }}
+{% endblock %}
