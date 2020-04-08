@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Auction;
 use App\Form\AuctionType;
 use App\Repository\AuctionRepository;
+use App\Repository\StateRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,20 @@ class AuctionController extends AbstractController
         return $this->render('auction/index.html.twig', [
             'auctions' => $auctionRepository->findAll(),
         ]);
+    }
+
+    /**
+     * @Route("/list", name="auction_list", methods={"GET"})
+     */
+    public function listAuctions(AuctionRepository $auctionRepository,StateRepository $stateRepository): Response
+    {
+
+        $template = 'auction/list.html.twig';
+        $args = [
+            'auctions' => $auctionRepository->findByExampleField($stateRepository->findLiveOne())
+        ];
+
+        return $this->render($template,$args);
     }
 
     /**
@@ -91,4 +106,5 @@ class AuctionController extends AbstractController
 
         return $this->redirectToRoute('auction_index');
     }
+
 }

@@ -19,22 +19,21 @@ class AuctionRepository extends ServiceEntityRepository
         parent::__construct($registry, Auction::class);
     }
 
-    // /**
-    //  * @return Auction[] Returns an array of Auction objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return Auction[] Returns an array of Auction objects
+      */
+
+    public function findByExampleField($stateRepository)
     {
+//vardump($stateRepository);
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('a.state ='. $stateRepository["id"])
             ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Auction

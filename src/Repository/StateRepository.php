@@ -36,15 +36,16 @@ class StateRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?State
+
+    public function findLiveOne()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('s.name = :live')
+            ->setParameter('live',"live")
+            ->select('s.id')
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

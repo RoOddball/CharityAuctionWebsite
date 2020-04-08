@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction index{% endblock %}
+
+{% block body %}
+    <h1>Auction index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Deadline</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% set i = 0 %}
+        {% for auction in auctions %}
+            {% set i=i+1 %}
+            <tr>
+                <td>{{ i }}</td>
+                <td>{{ auction.name }}</td>
+                <td>{{ auction.deadline ? auction.deadline|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url('user_register') }}">signup</a>
+
+{% endblock %}

@@ -2,24 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\IsBid;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class IsBidType extends AbstractType
+class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('isBid')
+            ->add('username')
+            ->add('userpassword')
+            ->add('usertype');
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => IsBid::class,
+            'data_class' => User::class,
         ]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,9 +34,19 @@ class Auction
     private $state;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\IsBid", inversedBy="auctions")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $isBid;
+    private $winner;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bid", mappedBy="auction")
+     */
+    private $bids;
+
+    public function __construct()
+    {
+        $this->bids = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,15 +89,51 @@ class Auction
         return $this;
     }
 
-    public function getIsBid(): ?IsBid
+    public function getWinner(): ?int
     {
-        return $this->isBid;
+        return $this->winner;
     }
 
-    public function setIsBid(?IsBid $isBid): self
+    public function setWinner(?int $winner): self
     {
-        $this->isBid = $isBid;
+        $this->winner = $winner;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Bid[]
+     */
+    public function getBids(): Collection
+    {
+        return $this->bids;
+    }
+
+    public function addBid(Bid $bid): self
+    {
+        if (!$this->bids->contains($bid)) {
+            $this->bids[] = $bid;
+            $bid->setAuction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBid(Bid $bid): self
+    {
+        if ($this->bids->contains($bid)) {
+            $this->bids->removeElement($bid);
+            // set the owning side to null (unless already changed)
+            if ($bid->getAuction() === $this) {
+                $bid->setAuction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->id;
     }
 }

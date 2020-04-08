@@ -12,6 +12,7 @@
                 <th>Name</th>
                 <th>Deadline</th>
                 <th>Status</th>
+                <th>Winner</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>{{ auction.name }}</td>
                 <td>{{ auction.deadline ? auction.deadline|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ auction.state }}</td>
+                <td>{{ auction.winner }}</td>
                 <td>
                     <a href="{{ path('auction_show', {'id': auction.id}) }}">show</a>
                     <a href="{{ path('auction_edit', {'id': auction.id}) }}">edit</a>
