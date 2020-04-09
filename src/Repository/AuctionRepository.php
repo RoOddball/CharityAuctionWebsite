@@ -19,9 +19,9 @@ class AuctionRepository extends ServiceEntityRepository
         parent::__construct($registry, Auction::class);
     }
 
-     /**
-      * @return Auction[] Returns an array of Auction objects
-      */
+    /**
+     * @return Auction[] Returns an array of Auction objects
+     */
 
     public function findByExampleField($stateRepository)
     {
@@ -31,7 +31,7 @@ class AuctionRepository extends ServiceEntityRepository
             ->orderBy('a.id', 'ASC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
 
 
@@ -47,3 +47,4 @@ class AuctionRepository extends ServiceEntityRepository
     }
     */
 }
+

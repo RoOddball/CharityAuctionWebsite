@@ -37,7 +37,7 @@ class AuctionFixtures extends Fixture
         $auction3->setDeadline(new \DateTime("2020-3-3 21:05:55"));
 
         $auction4 = new Auction();
-        $auction4->setName('Yemeni 13th century surgical set');
+        $auction4->setName('Yemeni 13th century surgeon kit');
         $auction4->setState($liveState);
         $auction4->setDeadline(new \DateTime("2020-6-4 20:25:15"));
 

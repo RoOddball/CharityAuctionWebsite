@@ -28,6 +28,11 @@ class Bid
      */
     private $auction;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $ammount;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +58,18 @@ class Bid
     public function setAuction(?Auction $auction): self
     {
         $this->auction = $auction;
+
+        return $this;
+    }
+
+    public function getAmmount(): ?int
+    {
+        return $this->ammount;
+    }
+
+    public function setAmmount(int $ammount): self
+    {
+        $this->ammount = $ammount;
 
         return $this;
     }

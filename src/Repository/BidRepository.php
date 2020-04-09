@@ -36,15 +36,17 @@ class BidRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Bid
+
+    public function findOneBySomeField($userID,$auctionID): ?Bid
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('b.user = :val1')
+            ->andWhere('b.auction = :val2')
+            ->setParameter('val1', $userID)
+            ->setParameter('val2', $auctionID)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

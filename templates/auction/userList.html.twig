@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction user list{% endblock %}
+{% block stylesheets %}
+    <style>
+        .numberLabel{
+            width: 5%;
+        }
+        .nameLabel{
+
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <h1>Auction user list</h1>
+
+
+
+        {% set i = 0 %}
+        {% for auction in auctions %}
+            {% set i=i+1 %}
+
+
+            <form method = "POST" action="bidOnAuction">
+                <label id="numberLabel" style="width: 40%">{{ i }}</label>
+                <label id="nameLabel">{{ auction.name }}</label>
+                <label id="deadlineLabel">{{ auction.deadline|date("h:m:s d/m/y") }}</label>
+                <label id="winnerLabel">{{ auction.winner }}</label>
+                <label for="idLabel" id="idLabel">{{ auction.id }}</label>
+                <a href="http://127.0.0.1:8000/auction/{{ auction.id }}/bidOnAuction"><button class="btn btn-lg btn-primary" type="submit">
+                        bid
+                    </button></a>
+
+
+            </form>
+
+        {% else %}
+            no records found
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+    <a href="{{ url('app_login') }}">login</a>
+
+{% endblock %}

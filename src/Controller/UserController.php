@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RegisterType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,55 +34,18 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('auction_list');
+            return $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @Route("/register", name="user_register", methods={"GET","POST"})
-     */
-    public function register(Request $request,UserRepository $userRepository)
-    {
-
-        $user = new User();
-
-        $form = $this->createForm(RegisterType::class, $user);
-        $form->handleRequest($request);
-        $user->setUsertype('regular');
-        $isTaken = false;
-        if(count($userRepository->findByExampleField($user->getUsername()))>0)
-            $isTaken = true;
-
-        if ($form->isSubmitted() && $form->isValid())
-            if(!$isTaken)
-                $this->createUser($user);
-            else
-                print 'no bueno';
-
-        return $this->render('user/register.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    public function createUser(User $user){
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
-
-        return $this->redirectToRoute('auction_list');
     }
 
     /**
