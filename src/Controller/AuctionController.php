@@ -16,10 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Form;
 
 /**
- * @Route("/auction")
+ * @Route("/auction",methods={"GET","POST"})
  */
 class AuctionController extends AbstractController
 {
+
     /**
      * @Route("/", name="auction_index", methods={"GET"})
      */
@@ -47,39 +48,45 @@ class AuctionController extends AbstractController
     /**
      * @Route("/userlist", name="auction_userlist", methods={"GET"})
      */
-    public function listUserAuctions(AuctionRepository $auctionRepository,StateRepository $stateRepository): Response
+    public function listUserAuctions(AuctionRepository $auctionRepository,StateRepository $stateRepository,BidRepository $bidRepository): Response
     {
 
         $template = 'auction/userList.html.twig';
+        $auctionUserList = $auctionRepository->findByExampleField($stateRepository->findLiveOne());
+        $uctionAllList = $auctionRepository->findAll();
+        $userID = $this->getUser()->getID();
+        $bidArray = [];
+
+        foreach ($uctionAllList as $bidAuction) :
+
+            $bid = $bidRepository->findOneBySomeField($userID, $bidAuction->getID());
+            if ($bid && !in_array($bidAuction,$auctionUserList)) {
+
+                array_push($auctionUserList, $bidAuction);
+                $bidAuction->addBid($bid);
+            }
+        endforeach;
+
+
+
+
+        foreach ($auctionUserList as $userAuction):
+            $bids = $userAuction->getBids();
+            $bidTag = "no bid";
+            foreach($bids as $bid) {
+                $bid = $bidRepository->findOneBySomeField($userID, $userAuction->getID());
+                if ($bid)
+                    $bidTag = "bidden";
+            }
+            array_push($bidArray,$bidTag);
+        endforeach;
+//var_dump($bidArray);
         $args = [
-            'auctions' => $auctionRepository->findByExampleField($stateRepository->findLiveOne())
+            'auctions' => $auctionUserList,
+            'bidArray' => $bidArray
         ];
 
         return $this->render($template,$args);
-    }
-
-    /**
-     * @Route("/{auctionID}/bidOnAuction", name="auction_bid", methods={"POST","GET"})
-     */
-    public function bidOnAction(Request $request,BidRepository $bidRepository){
-
-        if($request->getMethod() == Request::METHOD_POST){
-            $auctionID =$request->request->get('auctionID');
-            $userID = $this->getUser();
-            $bid = $bidRepository->findOneBySomeField($userID,$auctionID);
-            if(!$bid) {
-                $bid = new Bid();
-                $bid->setUser($userID);
-                $bid->setAuction($auctionID);
-                $bid->setAmmount(1);
-            }else{
-                $bid->setAmmount($bid->getAmmount()+1);
-            }
-            $this->getDoctrine()->getManager()->persist($bid);
-            $this->getDoctrine()->getManager()->flush();
-        }
-
-        return $this->redirectToRoute('auction_userlist');
     }
 
     /**
@@ -149,5 +156,35 @@ class AuctionController extends AbstractController
         }
 
         return $this->redirectToRoute('auction_index');
+    }
+
+    /**
+     * @Route("/bidOnAuction/{auctionID}", name="auction_bid", methods={"POST","GET"})
+     */
+    public function bidOnAction(Request $request,BidRepository $bidRepository,AuctionRepository $auctionRepository){
+
+        //if($request->getMethod() == Request::METHOD_POST){
+            //$auctionID =$request->request->get('auctionID');
+            //var_dump($auctionID);
+            //$auctionID = $request->query->get('auctionID');
+            //var_dump($auctionID);
+            $auctionID = $request->get('auctionID');
+            var_dump($auctionID);
+
+            $userID = $this->getUser();
+            $bid = $bidRepository->findOneBySomeField($userID,$auctionID);
+            if(!$bid) {
+                $bid = new Bid();
+                $bid->setUser($userID);
+                $bid->setAuction($auctionRepository->findOneByID($auctionID));
+                $bid->setAmmount(1);
+            }else{
+                $bid->setAmmount($bid->getAmmount()+1);
+            }
+            $this->getDoctrine()->getManager()->persist($bid);
+            $this->getDoctrine()->getManager()->flush();
+       // }
+
+        return $this->redirectToRoute('welcome');
     }
 }
