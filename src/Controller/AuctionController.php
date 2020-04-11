@@ -8,6 +8,7 @@ use App\Form\AuctionType;
 use App\Repository\AuctionRepository;
 use App\Repository\BidRepository;
 use App\Repository\StateRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,13 +22,18 @@ use Symfony\Component\Form\Form;
 class AuctionController extends AbstractController
 {
 
+
     /**
      * @Route("/", name="auction_index", methods={"GET"})
      */
     public function index(AuctionRepository $auctionRepository): Response
     {
+        if($this->getUser())
+            $nameOfUser = $this->getUser()->getUsername();
+
         return $this->render('auction/index.html.twig', [
             'auctions' => $auctionRepository->findAll(),
+            'nameOfUser' => $nameOfUser
         ]);
     }
 
@@ -39,7 +45,7 @@ class AuctionController extends AbstractController
 
         $template = 'auction/list.html.twig';
         $args = [
-            'auctions' => $auctionRepository->findByExampleField($stateRepository->findLiveOne())
+            'auctions' => $auctionRepository->findByExampleField($stateRepository->findLiveOne()),
         ];
 
         return $this->render($template,$args);
@@ -48,7 +54,10 @@ class AuctionController extends AbstractController
     /**
      * @Route("/userlist", name="auction_userlist", methods={"GET"})
      */
-    public function listUserAuctions(AuctionRepository $auctionRepository,StateRepository $stateRepository,BidRepository $bidRepository): Response
+    public function listUserAuctions(AuctionRepository $auctionRepository,
+                                     StateRepository $stateRepository,
+                                     BidRepository $bidRepository,
+                                     UserRepository $userRepository): Response
     {
 
         $template = 'auction/userList.html.twig';
@@ -56,6 +65,11 @@ class AuctionController extends AbstractController
         $uctionAllList = $auctionRepository->findAll();
         $userID = $this->getUser()->getID();
         $bidArray = [];
+        $winners = [];
+        $user = $this->getUser();
+
+        if($this->getUser())
+            $nameOfUser = $this->getUser()->getUsername();
 
         foreach ($uctionAllList as $bidAuction) :
 
@@ -71,19 +85,32 @@ class AuctionController extends AbstractController
 
 
         foreach ($auctionUserList as $userAuction):
+
             $bids = $userAuction->getBids();
             $bidTag = "no bid";
+
+            $winner = '';
+
             foreach($bids as $bid) {
                 $bid = $bidRepository->findOneBySomeField($userID, $userAuction->getID());
                 if ($bid)
                     $bidTag = "bidden";
             }
+
+            if($userAuction->getWinner())
+                $winner = $userRepository->findUserFromID($userAuction->getWinner())->getUsername();
+
             array_push($bidArray,$bidTag);
+            array_push($winners,$winner);
+
         endforeach;
-//var_dump($bidArray);
+//var_dump($winners);
         $args = [
             'auctions' => $auctionUserList,
-            'bidArray' => $bidArray
+            'bidArray' => $bidArray,
+            'winners' => $winners,
+            'nameOfUser' => $nameOfUser,
+            'user' => $user
         ];
 
         return $this->render($template,$args);
@@ -169,7 +196,8 @@ class AuctionController extends AbstractController
             //$auctionID = $request->query->get('auctionID');
             //var_dump($auctionID);
             $auctionID = $request->get('auctionID');
-            var_dump($auctionID);
+//var_dump($auctionID);
+            $auction = $auctionRepository->findOneByID($auctionID);
 
             $userID = $this->getUser();
             $bid = $bidRepository->findOneBySomeField($userID,$auctionID);
@@ -178,13 +206,16 @@ class AuctionController extends AbstractController
                 $bid->setUser($userID);
                 $bid->setAuction($auctionRepository->findOneByID($auctionID));
                 $bid->setAmmount(1);
+                $auction->setWinner($userID->getID());
             }else{
                 $bid->setAmmount($bid->getAmmount()+1);
+                $bid->setUser($userID);
+                $auction->setWinner($userID->getID());
             }
             $this->getDoctrine()->getManager()->persist($bid);
             $this->getDoctrine()->getManager()->flush();
        // }
 
-        return $this->redirectToRoute('welcome');
+        return $this->redirectToRoute('auction_userlist');
     }
 }

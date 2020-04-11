@@ -97,9 +97,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         }
         $roles = $token->getRoleNames();
         if(in_array('ROLE_ADMIN',$roles))
-            return new RedirectResponse($this->urlGenerator->generate(''));
+            return new RedirectResponse($this->urlGenerator->generate('auction_userlist'));
         else if(in_array('ROLE_STAFF',$roles))
-            return new RedirectResponse($this->urlGenerator->generate(''));
+            return new RedirectResponse($this->urlGenerator->generate('auction_userlist'));
         else
             return new RedirectResponse($this->urlGenerator->generate('auction_userlist'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);

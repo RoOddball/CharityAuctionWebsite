@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Form\ResetType;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -15,6 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractController
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     /**
      * @Route("/", name="user_index", methods={"GET"})
      */
@@ -33,6 +42,8 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+
+        $user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword()));
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -66,6 +77,8 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
+        $user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword()));
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
@@ -73,6 +86,32 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/reset", name="user_reset", methods={"GET","POST"})
+     */
+    public function reset(Request $request,User $user): Response
+    {
+        //$user = $this->getUser();
+        $form = $this->createForm(ResetType::class, $user);
+        $form->handleRequest($request);
+
+        $user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword()));
+        $user->setRoles($this->getUser()->getRoles());
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('welcome');
+        }
+
+        //$user->getPassword();
+
+        return $this->render('user/reset.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
