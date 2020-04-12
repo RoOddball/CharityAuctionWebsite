@@ -1,49 +1,48 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Auction user list{% endblock %}
-{% block stylesheets %}
-    <style>
-        .numberLabel{
-            width: 5%;
-        }
-        .nameLabel{
-
-        }
-    </style>
-{% endblock %}
 {% block body %}
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ nameOfUser }}, <a href="{{ path('app_logout') }}">Logout</a>
-            or <a href="{{ path('user_reset', {'id': user.id}) }}"> reset credentials </a>
+            You are logged in as {{ nameOfUser }}, <a href="{{ path('app_logout') }}"><button>logout</button></a>
+            or <a href="{{ path('user_reset', {'id': user.id}) }}"> <button style="width: 150px">reset credentials</button> </a>
         </div>
     {% endif %}
     <h1>Auction user list</h1>
 
-
-
+    <div>
+        <ul>
+            <li style="width: 3%"><b>No.</b></li>
+            <li style="width: 35%"><b>Article</b></li>
+            <li style="width: 10%"><b>Deadline</b></li>
+            <li style="width: 10%"><b>Winner so far</b></li>
+            <li></li>
+        </ul>
+    </div>
+    <br>
+    <br>
         {% set i = 0 %}
         {% for auction in auctions %}
 
-
-
             <form method = "POST" action="bidOnAuction">
-                <label id="numberLabel" style="width: 40%">{{ i+1 }}</label>
-                <label id="nameLabel">{{ auction.name }}</label>
-                <label id="deadlineLabel">{{ auction.deadline|date("h:m:s d/m/y") }}</label>
-                <label id="winnerLabel">{{ winners[i] }}</label>
-                <label id="ifBidLabel">{{ bidArray[i] }}</label>
 
-                    <a href="{{ path('auction_bid',{'auctionID':auction.id}) }}">bid</a>
-
+                <div>
+                    <ul>
+                        <li id="numberLabel"><label>{{ i+1 }}</label></li>
+                        <li id="nameLabel"><label>{{ auction.name }}</label></li>
+                        <li id="deadlineLabel"><label>{{ auction.deadline|date("h:m:s d/m/y") }}</label></li>
+                        <li id="winnerLabel"><label>{{ winners[i] }}</label></li>
+                        <li id="ifBidLabel"><label>{{ bidArray[i] }}</label></li>
+                        <li id="butLabel"><a href="{{ path('auction_bid',{'auctionID':auction.id}) }}"><button>bid</button></a></li>
+                    </ul>
+                </div>
             </form>
+            <br>
 
             {% set i=i+1 %}
+
         {% else %}
             no records found
         {% endfor %}
-
-        </tbody>
-    </table>
 
 {% endblock %}

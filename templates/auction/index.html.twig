@@ -3,6 +3,13 @@
 {% block title %}Auction index{% endblock %}
 
 {% block body %}
+
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ nameOfUser }}, <a href="{{ path('app_logout') }}"><button><b>Logout</b></button></a>
+        </div>
+    {% endif %}
+
     <h1>Auction index</h1>
 
     <table class="table">

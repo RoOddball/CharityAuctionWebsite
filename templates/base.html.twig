@@ -2,8 +2,69 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <link href='https://fonts.googleapis.com/css?family=Gruppo' rel='stylesheet'>
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <style>
+            button{
+                outline: 0 !important ;
+                border-radius: 30px;
+                border-width: 0px;
+                height:30px;
+                width: 100px
+            }
+            button:hover{
+                background-color: rgba(130,112,109,.2);
+                color: darkred;
+            }
+            input{
+                border-radius: 30px;
+                outline: 0 !important ;
+                height:27px;
+                border:none;
+                background-color: rgba(0,0,0,.05);
+            }
+            body{
+                background-image: radial-gradient(white,rgba(145,214,186,.05),rgba(112,35,68,.2));
+                background-repeat: no-repeat, repeat, repeat;
+                font-family: 'Gruppo';
+            }
+            h1 {
+                font-family: 'Gruppo';
+            }
+            ul{
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            li{
+                float: left;
+            }
+            a:hover{
+                color:darkred;
+            }
+                #numberLabel{
+                    width:3%;
+                }
+                #nameLabel{
+                    width:35%;
+                }
+                #deadlineLabel{
+                    width:10%;
+                }
+                #winnerLabel{
+                    width: 10%;
+                }
+                #ifBidLabel{
+                    width: 5%;
+                }
+                #butLabel{
+                    width: 5%;
+                }
+            </style>
+        {% endblock %}
+
     </head>
     <body>
         {% block body %}{% endblock %}

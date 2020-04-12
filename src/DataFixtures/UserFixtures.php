@@ -24,6 +24,7 @@ class UserFixtures extends Fixture
         $user3 = new User();
         $user4 = new User();
         $user5 = new User();
+        $user6 = new User();
 
         $user1->setUsername('Jim');
         $user1->setEmail('regular@gmain.com');
@@ -49,6 +50,12 @@ class UserFixtures extends Fixture
         $user5->setEmail('regularinne@gmain.com');
         $user5->setRoles(['ROLE_USER']);
         $user5->setPassword($this->passwordEncoder->encodePassword($user1,'xyz'));
+
+        $user6->setUsername('Matt');
+        $user6->setEmail('matt@gmain.com');
+        $user6->setRoles(['ROLE_DEV']);
+        $user6->setPassword($this->passwordEncoder->encodePassword($user1,'dev'));
+
 
         $manager->persist($user1);
         $manager->persist($user2);

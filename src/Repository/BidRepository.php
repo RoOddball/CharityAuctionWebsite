@@ -19,22 +19,21 @@ class BidRepository extends ServiceEntityRepository
         parent::__construct($registry, Bid::class);
     }
 
-    // /**
-    //  * @return Bid[] Returns an array of Bid objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return Bid[] Returns an array of Bid objects
+      */
+
+    public function findByUser($value)
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
+            ->andWhere('b.user = :val')
             ->setParameter('val', $value)
             ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
 
     public function findOneBySomeField($userID,$auctionID): ?Bid

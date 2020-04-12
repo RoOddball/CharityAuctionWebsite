@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\AuctionRepository;
+use App\Repository\BidRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\User;
 use App\Form\UserType;
@@ -11,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Form\ResetType;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/user")
@@ -26,16 +29,19 @@ class UserController extends AbstractController
 
     /**
      * @Route("/", name="user_index", methods={"GET"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
+            'user' => $this->getUser()
         ]);
     }
 
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -61,6 +67,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="user_show", methods={"GET"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function show(User $user): Response
     {
@@ -71,6 +78,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, User $user): Response
     {
@@ -93,6 +101,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}/reset", name="user_reset", methods={"GET","POST"})
+     * @isGranted ("ROLE_USER")
      */
     public function reset(Request $request,User $user): Response
     {
@@ -101,7 +110,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         $user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword()));
-        $user->setRoles($this->getUser()->getRoles());
+        //$user->setRoles($this->getUser()->getRoles());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -119,11 +128,26 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * @isGranted("ROLE_ADMIN")
      */
-    public function delete(Request $request, User $user): Response
+    public function delete(Request $request, User $user,
+                           AuctionRepository $auctionRepository,
+                           BidRepository $bidRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+
+            $bids = $bidRepository->findByUser($user);
+
             $entityManager = $this->getDoctrine()->getManager();
+
+            //remove bids associated with user to be deleted
+            //and set winner for associated auction to null
+
+            foreach($bids as $bid):
+                $bid->getAuction()->setWinner(null);
+                $entityManager->remove($bid);
+            endforeach;
+
             $entityManager->remove($user);
             $entityManager->flush();
         }

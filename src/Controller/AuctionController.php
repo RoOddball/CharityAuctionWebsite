@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Form;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/auction",methods={"GET","POST"})
@@ -25,6 +26,7 @@ class AuctionController extends AbstractController
 
     /**
      * @Route("/", name="auction_index", methods={"GET"})
+     * @isGranted("ROLE_STAFF")
      */
     public function index(AuctionRepository $auctionRepository): Response
     {
@@ -53,6 +55,7 @@ class AuctionController extends AbstractController
 
     /**
      * @Route("/userlist", name="auction_userlist", methods={"GET"})
+     * @isGranted ("ROLE_USER")
      */
     public function listUserAuctions(AuctionRepository $auctionRepository,
                                      StateRepository $stateRepository,
@@ -118,6 +121,7 @@ class AuctionController extends AbstractController
 
     /**
      * @Route("/new", name="auction_new", methods={"GET","POST"})
+     * @isGranted("ROLE_STAFF")
      */
     public function new(Request $request): Response
     {
@@ -141,6 +145,7 @@ class AuctionController extends AbstractController
 
     /**
      * @Route("/{id}", name="auction_show", methods={"GET"})
+     * @isGranted("ROLE_STAFF")
      */
     public function show(Auction $auction): Response
     {
@@ -151,6 +156,7 @@ class AuctionController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="auction_edit", methods={"GET","POST"})
+     * @isGranted("ROLE_STAFF")
      */
     public function edit(Request $request, Auction $auction): Response
     {
@@ -173,6 +179,7 @@ class AuctionController extends AbstractController
 
     /**
      * @Route("/{id}", name="auction_delete", methods={"DELETE"})
+     * @isGranted("ROLE_STAFF")
      */
     public function delete(Request $request, Auction $auction): Response
     {
@@ -187,6 +194,7 @@ class AuctionController extends AbstractController
 
     /**
      * @Route("/bidOnAuction/{auctionID}", name="auction_bid", methods={"POST","GET"})
+     * @isGranted ("ROLE_USER")
      */
     public function bidOnAction(Request $request,BidRepository $bidRepository,AuctionRepository $auctionRepository){
 

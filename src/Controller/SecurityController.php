@@ -18,7 +18,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils,UserRepository $userRepository): Response
     {
         if($this->getUser())
-            return new RedirectResponse($this->generateUrl('auction_index'));
+            return new RedirectResponse($this->generateUrl('auction_userlist'));
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
