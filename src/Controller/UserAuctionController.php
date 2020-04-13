@@ -96,6 +96,7 @@ class UserAuctionController extends AbstractController
         $userID = $this->getUser()->getID();
         $bidArray = [];
         $winners = [];
+        $ammounts =[];
         $user = $this->getUser();
 
         if($this->getUser())
@@ -118,13 +119,15 @@ class UserAuctionController extends AbstractController
 
             $bids = $userAuction->getBids();
             $bidTag = "no bid";
-
             $winner = '';
+            $ammount = 0;
 
             foreach($bids as $bid) {
                 $bid = $bidRepository->findOneBySomeField($userID, $userAuction->getID());
-                if ($bid)
+                if ($bid) {
                     $bidTag = "bidden";
+                    $ammount = $bid->getAmmount();
+                }
             }
 
             if($userAuction->getWinner())
@@ -132,6 +135,7 @@ class UserAuctionController extends AbstractController
 
             array_push($bidArray,$bidTag);
             array_push($winners,$winner);
+            array_push($ammounts,$ammount);
 
         endforeach;
 //var_dump($winners);
@@ -139,6 +143,7 @@ class UserAuctionController extends AbstractController
             'auctions' => $auctionUserList,
             'bidArray' => $bidArray,
             'winners' => $winners,
+            'ammounts' => $ammounts,
             'nameOfUser' => $nameOfUser,
             'user' => $user
         ];
