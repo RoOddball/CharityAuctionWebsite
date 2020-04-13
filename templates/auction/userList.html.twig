@@ -24,7 +24,7 @@
         {% set i = 0 %}
         {% for auction in auctions %}
 
-            <form method = "POST" action="bidOnAuction">
+            <form method = "POST" action="bidOnAuction/{{ auction.id }}">
 
                 <div>
                     <ul>
@@ -33,7 +33,8 @@
                         <li id="deadlineLabel"><label>{{ auction.deadline|date("h:m:s d/m/y") }}</label></li>
                         <li id="winnerLabel"><label>{{ winners[i] }}</label></li>
                         <li id="ifBidLabel"><label>{{ bidArray[i] }}</label></li>
-                        <li id="butLabel"><a href="{{ path('auction_bid',{'auctionID':auction.id}) }}"><button>bid</button></a></li>
+                        <li id="butLabel"><a href={{ url('auction_bid',{'auctionID':auction.id}) }}><button>bid</button></a></li>
+                        {{ auction.id }}
                     </ul>
                 </div>
             </form>

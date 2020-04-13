@@ -50,12 +50,21 @@ class UserRepository extends ServiceEntityRepository
 
     public function findUserFromID($value): ?User{
 
+    return $this->createQueryBuilder('u')
+        ->andWhere('u.id = :val')
+        ->setParameter('val', $value)
+        ->getQuery()
+        ->getOneOrNullResult()
+        ;
+    }
+
+    public function findUserFromUsername($value): ?User{
+
         return $this->createQueryBuilder('u')
-            ->andWhere('u.id = :val')
+            ->andWhere('u.username = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
             ;
     }
-
 }
