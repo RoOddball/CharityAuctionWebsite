@@ -49,12 +49,12 @@ class SelfUserController extends AbstractController
             $user->setUsername($request->get('username'));
             $user->setPassword($this->passwordEncoder->encodePassword($user,$request->get('password')));
             $user->setEmail($request->get('email'));
-            $caca = $userRepository->findUserFromUsername($request->get('username'));
+            $usernameExists = $userRepository->findUserFromUsername($request->get('username'));
             if($currentUsername==$request->get('username')) {
                 $this->getDoctrine()->getManager()->persist($user);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('auction_list');
-            }else if(!$caca){
+            }else if(!$usernameExists){
                 $this->getDoctrine()->getManager()->persist($user);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('auction_list');
