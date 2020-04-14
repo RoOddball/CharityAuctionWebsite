@@ -3,11 +3,34 @@
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
+
     <h1>Edit User</h1>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+    {% if error %}
+        <div class="alert alert-danger">{{ error}}</div>
+    {% endif %}
 
-    <a href="{{ path('user_index') }}">back to list</a>
+    <form method="post">
 
-    {{ include('user/_delete_form.html.twig') }}
+    <label for="inputEmail">Email</label>
+    <input type="email" name="email" id="inputEmail" class="form-control" value="{{ emailPlaceHolder }}" required autofocus>
+    <label for="inputUsername">Username</label>
+    <input type="text" name="username" id="inputUsername" class="form-control" value="{{ usernamePlaceHolder }}" required>
+    <label for="inputPassword">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" required>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+    >
+    &nbsp &nbsp &nbsp &nbsp
+    <button class="btn btn-lg btn-primary" type="submit">
+        <b>Update</b>
+    </button>
+    </form>
+    <br>
+
+    {{ include('user/_selfDelete_form.html.twig') }}
+    <br>
+
+    <a href="{{ url('auction_list') }}"><button style = "background-color: rgba(0,0,0,0)"><b>&laquo; back</b></button></a>
 {% endblock %}

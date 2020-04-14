@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auction{% endblock %}
+
+{% block body %}
+    <h1>Auction</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ auction.id }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ auction.name }}</td>
+        </tr>
+        <tr>
+            <th>Deadline</th>
+            <td>{{ auction.deadline ? auction.deadline|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('auction_list',{'id': auction.id}) }}"><button><b>back to list</b></button></a>
+
+{% endblock %}

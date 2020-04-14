@@ -22,6 +22,7 @@
                 <td>{{ i }}</td>
                 <td>{{ auction.name }}</td>
                 <td>{{ auction.deadline ? auction.deadline|date('Y-m-d H:i:s') : '' }}</td>
+                <td><a href="{{ url('auction_visitorshow',{'id': auction.id}) }}"><button><b>show</b></button></a><td>
             </tr>
         {% else %}
             <tr>

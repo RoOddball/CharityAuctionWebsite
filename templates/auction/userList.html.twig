@@ -16,9 +16,9 @@
             <li style="width: 35%"><b>Article</b></li>
             <li style="width: 10%"><b>Deadline</b></li>
             <li style="width: 10%"><b>Winner so far</b></li>
-            <li style="width: 10%">&nbsp</li>
+            <li style="width: 10%"><b>Your bids</b></li>
             <li style="width: 5%">&nbsp</li>
-            <li style="width: 10%"><b>Sum</b></li>
+            <li style="width: 10%"><b>Ammount</b></li>
         </ul>
     </div>
     <br>
@@ -37,8 +37,7 @@
                         <li id="ifBidLabel"><label>{{ bidArray[i] }}</label></li>
                         <li id="butLabel"><a href={{ path('auction_bid',{'auctionID':auction.id}) }}>
                                 <button style="width: 50px">bid</button></a></li>
-                        <li id="sumLabel">{{ ammounts[i] }}</li>
-
+                        <li id="sumLabel">{{ ammounts[i] }} &#163;</li>
                     </ul>
                 </div>
             </form>

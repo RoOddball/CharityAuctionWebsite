@@ -35,25 +35,30 @@ class UserAuctionController extends AbstractController
      */
     public function bidOnAction(Request $request,BidRepository $bidRepository,AuctionRepository $auctionRepository){
 
-        //if($request->getMethod() == Request::METHOD_POST){
-        // $auctionID =$request->request->get('auctionID');
-        //var_dump($auctionID);
-        //$auctionID = $request->query->get('auctionID');
-        //var_dump($auctionID);
         $auctionID = $request->get('auctionID');
         var_dump($auctionID);
         $auction = $auctionRepository->findOneByID($auctionID);
 
         $userID = $this->getUser();
+
+        $bids = $bidRepository->findByAuction($auction);
+
         $bid = $bidRepository->findOneBySomeField($userID,$auctionID);
         if(!$bid) {
             $bid = new Bid();
             $bid->setUser($userID);
             $bid->setAuction($auctionRepository->findOneByID($auctionID));
-            $bid->setAmmount(1);
+
+            //findByAuction returns an array of bids assocated to an auction obj
+            //ordered in descending order by amount so the first item in array
+            //has the highest amount attribute always in the bids of an auction
+            if(count($bids)>0)
+                $bid->setAmmount($bidRepository->findByAuction($auction)[0]->getAmmount()+1);
+            else
+                $bid->setAmmount(1);
             $auction->setWinner($userID->getID());
         }else{
-            $bid->setAmmount($bid->getAmmount()+1);
+            $bid->setAmmount($bidRepository->findByAuction($auction)[0]->getAmmount()+1);
             $bid->setUser($userID);
             $auction->setWinner($userID->getID());
         }
@@ -94,13 +99,17 @@ class UserAuctionController extends AbstractController
         $auctionUserList = $auctionRepository->findByExampleField($stateRepository->findLiveOne());
         $uctionAllList = $auctionRepository->findAll();
         $userID = $this->getUser()->getID();
+        $user = $this->getUser();
         $bidArray = [];
         $winners = [];
         $ammounts =[];
-        $user = $this->getUser();
 
         if($this->getUser())
             $nameOfUser = $this->getUser()->getUsername();
+
+        //for each of the auctions check if the current user made a bid
+        //if so we add them to the array of auctions to be displayed
+        //along with the live ones
 
         foreach ($uctionAllList as $bidAuction) :
 
@@ -113,25 +122,45 @@ class UserAuctionController extends AbstractController
         endforeach;
 
 
-
+        //for each of the auctions in the "diplay to user" array
+        //make array for the your bids label
+        //make array for winner label
+        //make array for ammount label
 
         foreach ($auctionUserList as $userAuction):
 
+            //get the bids of each auction obj in a var called bids
+
             $bids = $userAuction->getBids();
             $bidTag = "no bid";
-            $winner = '';
+            $winner = 'none' ;
             $ammount = 0;
+
+            //if the array is not empty
+            //the findByAuction method returns bids of an auction in descending order by amount
+            //so we get the first item in the array which has already the highest amount attribute
+
+            if(count($bids)>0)
+                $ammount = $bidRepository->findByAuction($userAuction)[0]->getAmmount();
+
+            //for each bid of an auction obj we check to see if they have this auction and user as
+            //attributes and if so we make the your bid label to display bidden
 
             foreach($bids as $bid) {
                 $bid = $bidRepository->findOneBySomeField($userID, $userAuction->getID());
                 if ($bid) {
                     $bidTag = "bidden";
-                    $ammount = $bid->getAmmount();
                 }
             }
 
+            //we get the username of the winner from the auctions winner attribute which is an int indicating a
+            //user id
+
             if($userAuction->getWinner())
                 $winner = $userRepository->findUserFromID($userAuction->getWinner())->getUsername();
+
+            //we push all these items into arrays with indexae equal to the index of the auction obj
+            // we wish to associate them with in the auctionUserList array
 
             array_push($bidArray,$bidTag);
             array_push($winners,$winner);
@@ -149,5 +178,15 @@ class UserAuctionController extends AbstractController
         ];
 
         return $this->render($template,$args);
+    }
+
+    /**
+     * @Route("/{id}", name="auction_visitorshow", methods={"GET"})
+     */
+    public function show(Auction $auction): Response
+    {
+        return $this->render('auction/visitorShow.html.twig', [
+            'auction' => $auction,
+        ]);
     }
 }

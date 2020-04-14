@@ -99,32 +99,32 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/reset", name="user_reset", methods={"GET","POST"})
-     * @isGranted ("ROLE_USER")
-     */
-    public function reset(Request $request,User $user): Response
-    {
-        //$user = $this->getUser();
-        $form = $this->createForm(ResetType::class, $user);
-        $form->handleRequest($request);
-
-        $user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword()));
-        //$user->setRoles($this->getUser()->getRoles());
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('welcome');
-        }
-
-        //$user->getPassword();
-
-        return $this->render('user/reset.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
+//    /**
+//     * @Route("/{id}/reset", name="user_reset", methods={"GET","POST"})
+//     * @isGranted ("ROLE_USER")
+//     */
+//    public function reset(Request $request,User $user): Response
+//    {
+//        //$user = $this->getUser();
+//        $form = $this->createForm(ResetType::class, $user);
+//        $form->handleRequest($request);
+//
+//        $user->setPassword($this->passwordEncoder->encodePassword($user,$user->getPassword()));
+//        //$user->setRoles($this->getUser()->getRoles());
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $this->getDoctrine()->getManager()->flush();
+//
+//            return $this->redirectToRoute('welcome');
+//        }
+//
+//        //$user->getPassword();
+//
+//        return $this->render('user/reset.html.twig', [
+//            'user' => $user,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
     /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
@@ -153,5 +153,6 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+
     }
 }

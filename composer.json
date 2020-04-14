@@ -5,6 +5,7 @@
         "php": "^7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "codeception/codeception": "^4.1",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "fzaninotto/faker": "^1.9",
         "sensio/framework-extra-bundle": "^5.1",
@@ -33,6 +34,10 @@
         "symfony/yaml": "5.0.*"
     },
     "require-dev": {
+        "codeception/module-asserts": "^1.1",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-symfony": "^1.1",
+        "composer/composer": "^1.10",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/profiler-pack": "*",

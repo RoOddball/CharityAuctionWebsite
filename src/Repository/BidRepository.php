@@ -34,7 +34,20 @@ class BidRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return Bid[] Returns an array of Bid objects
+     */
 
+    public function findByAuction($value)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.auction = :val')
+            ->setParameter('val', $value)
+            ->orderBy('b.ammount', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 
     public function findOneBySomeField($userID,$auctionID): ?Bid
     {
