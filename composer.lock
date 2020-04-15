@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39f4cf779dfeccc8e1569f916012092a",
+    "content-hash": "9eefc023029b2495d315dbe5fcf432bf",
     "packages": [
         {
             "name": "behat/gherkin",
@@ -8188,6 +8188,108 @@
                 "codeception"
             ],
             "time": "2019-11-13T17:32:27+00:00"
+        },
+        {
+            "name": "codeception/module-db",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Codeception/module-db.git",
+                "reference": "13a2b86206d09c50ab2e5375b261df35b650e58f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Codeception/module-db/zipball/13a2b86206d09c50ab2e5375b261df35b650e58f",
+                "reference": "13a2b86206d09c50ab2e5375b261df35b650e58f",
+                "shasum": ""
+            },
+            "require": {
+                "codeception/codeception": "*@dev",
+                "php": ">=5.6.0 <8.0"
+            },
+            "conflict": {
+                "codeception/codeception": "<4.0"
+            },
+            "require-dev": {
+                "codeception/util-robohelpers": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Bodnarchuk"
+                },
+                {
+                    "name": "Gintautas Miselis"
+                }
+            ],
+            "description": "WebDriver module for Codeception",
+            "homepage": "http://codeception.com/",
+            "keywords": [
+                "acceptance-testing",
+                "browser-testing",
+                "codeception"
+            ],
+            "time": "2019-12-08T17:56:49+00:00"
+        },
+        {
+            "name": "codeception/module-doctrine2",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Codeception/module-doctrine2.git",
+                "reference": "bbeb69dadc7ca5e724907e81d35bb392f27b4480"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Codeception/module-doctrine2/zipball/bbeb69dadc7ca5e724907e81d35bb392f27b4480",
+                "reference": "bbeb69dadc7ca5e724907e81d35bb392f27b4480",
+                "shasum": ""
+            },
+            "require": {
+                "codeception/codeception": "4.0.x-dev | ^4.0",
+                "php": ">=5.6.0 <8.0"
+            },
+            "require-dev": {
+                "codeception/util-robohelpers": "dev-master",
+                "doctrine/annotations": "^1",
+                "doctrine/data-fixtures": "^1",
+                "doctrine/orm": "^2",
+                "ramsey/uuid-doctrine": "^1.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Bodnarchuk"
+                },
+                {
+                    "name": "Alex Kunin"
+                }
+            ],
+            "description": "Doctrine2 module for Codeception",
+            "homepage": "http://codeception.com/",
+            "keywords": [
+                "codeception",
+                "doctrine2"
+            ],
+            "time": "2019-11-13T17:19:26+00:00"
         },
         {
             "name": "codeception/module-phpbrowser",

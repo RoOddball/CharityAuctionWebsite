@@ -69,7 +69,6 @@ class UserAuctionController extends AbstractController
         return $this->redirectToRoute('auction_userlist');
     }
 
-
     /**
      * @Route("/list", name="auction_list", methods={"GET"})
      */

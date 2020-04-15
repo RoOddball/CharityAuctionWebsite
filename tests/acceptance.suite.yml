@@ -10,3 +10,4 @@ modules:
         - PhpBrowser:
             url: http://localhost:8000
         - \App\Tests\Helper\Acceptance
+

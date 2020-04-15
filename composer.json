@@ -35,6 +35,8 @@
     },
     "require-dev": {
         "codeception/module-asserts": "^1.1",
+        "codeception/module-db": "^1.0",
+        "codeception/module-doctrine2": "^1.0",
         "codeception/module-phpbrowser": "^1.0",
         "codeception/module-symfony": "^1.1",
         "composer/composer": "^1.10",

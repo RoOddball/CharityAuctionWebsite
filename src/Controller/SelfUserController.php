@@ -61,8 +61,6 @@ class SelfUserController extends AbstractController
             }else
                 $error = 'username not available';
         }
-        var_dump($user);
-        //$user->getPassword();
 
         return $this->render('user/reset.html.twig', [
             'user' => $user,
@@ -81,7 +79,8 @@ class SelfUserController extends AbstractController
                            AuctionRepository $auctionRepository,
                            BidRepository $bidRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
 
             $bids = $bidRepository->findByUser($user);
 
@@ -90,17 +89,13 @@ class SelfUserController extends AbstractController
             //remove bids associated with user to be deleted
             //and set winner for associated auction to null
 
-            foreach($bids as $bid):
+            foreach ($bids as $bid):
                 $bid->getAuction()->setWinner(null);
                 $entityManager->remove($bid);
             endforeach;
-
             $entityManager->remove($user);
             $entityManager->flush();
             return $this->redirectToRoute('welcome');
         }
-
-
-
     }
 }

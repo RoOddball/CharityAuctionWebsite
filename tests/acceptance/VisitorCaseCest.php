@@ -1,10 +1,10 @@
 <?php namespace App\Tests;
 use App\Tests\AcceptanceTester;
 
-class LiveAuctionListPageCest
+class VisitorCaseCest
 {
     // tests
-    public function tryToTest(AcceptanceTester $I)
+    public function tryToTestVisitorCase(AcceptanceTester $I)
     {
         $I->amOnPage('/');
         $I->click('auction.com');
